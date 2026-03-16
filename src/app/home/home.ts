@@ -9,12 +9,24 @@ import { HousingService } from '../housing-service';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
-  readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
-  housingLocationList: HousingLocationInfo[] = [];
-  housingService = inject(HousingService);
 
+export class Home {
+  // readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
+  housingLocationList: HousingLocationInfo[] = [];
+  // Injecting HousingService into the Component
+  housingService: HousingService = inject(HousingService);
+  filteredLocationList: HousingLocationInfo[] = [];
   constructor() {
     this.housingLocationList = this.housingService.getAllHousingLocation();
+    this.filteredLocationList = this.housingLocationList;
+  }
+  filterResults(text: string) {
+    if (!text) {
+      this.filteredLocationList = this.housingLocationList;
+      return;
+    }
+    this.filteredLocationList = this.housingLocationList.filter((housingLocation) =>
+      housingLocation?.city.toLowerCase().includes(text.toLowerCase()),
+    );
   }
 }
